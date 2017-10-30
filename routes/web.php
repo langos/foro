@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -28,4 +29,9 @@ Route::get('posts/create', [
 Route::post('posts/create', [
     'uses' => 'CreatePostController@store',
     'as' => 'posts.store'
+]);
+
+Route::get('/posts/{post}',[
+    'uses' => 'PostController@show',
+    'as' => 'posts.show'
 ]);
