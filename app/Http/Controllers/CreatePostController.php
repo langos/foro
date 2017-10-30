@@ -9,6 +9,13 @@ class CreatePostController extends Controller
 {
     //
 
+
+    public function __construct() {
+
+        $this->middleware('auth');
+
+    }
+
     public function create() 
     {
         return view('posts.create');
@@ -16,6 +23,12 @@ class CreatePostController extends Controller
 
     public function store(Request $request)
     {
+
+        $this->validate($request, [
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+
         $post = new Post($request->all());
 
         auth()->user()->posts()->save($post);
