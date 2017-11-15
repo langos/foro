@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\Post;
 
 abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
@@ -30,12 +31,17 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
 
-    public function DefaultUser() 
+    public function DefaultUser(array $attributes = []) 
     {
 
         if($this->defaultUser) {
            return $this->defaultUser;
         }
-        return  $this->defaultUser = factory(\App\User::class)->create();
+        return  $this->defaultUser = factory(\App\User::class)->create($attributes);
+    }
+
+    protected function createPost(array $attributes = [])
+    {
+        return factory(\App\Post::class)->create($attributes);
     }
 }

@@ -1,10 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ShowPostTest extends TestCase
+class ShowPostTest extends FeatureTestCase
 {
     /**
      * A basic test example.
@@ -18,17 +15,34 @@ class ShowPostTest extends TestCase
             'name' => 'Agustin'
         ]);
         
-        $post = factory(\App\Post::class)->make([
+        $post = $this->createPost([
             'title' => 'Este es el titulo del post',
-            'content' => 'Este es el contenido del post'
+            'content' => 'Este es el contenido del post',
+            'user_id' => $user->id
         ]);
 
-        $user->posts()->save($post);
 
         //When
-        $this->visit(route('posts.show', $post))
+        $this->visit($post->url)
              ->seeInElement('h1', $post->title)
              ->see($post->content)
-             ->see($user->name);
+             ->see('Agustin');
+    }
+
+    function test_old_url_redirect_to_new_url()
+    {
+        //Having
+
+	     $post = $this->createPost([
+            'title' => 'Old title'
+        ]);
+        
+        
+        $url = $post->url;
+        
+        $post->update([ 'title' => 'New title' ]);
+        
+        $this->visit($url)
+	    	->seePageIs($post->url);
     }
 }
