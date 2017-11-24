@@ -11,12 +11,21 @@ class Post extends Model
         'title', 'content',
     ];
 
+    protected $casts = [
+        'pending' => 'boolean'
+    ];
+
+
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
     public function setTitleAttribute($value)
     {
